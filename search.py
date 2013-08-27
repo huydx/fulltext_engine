@@ -37,7 +37,6 @@ class Search:
           frequency_hash[content_id] = 1
     
     max_num = len(frequency_hash) if numOfResult > len(frequency_hash) else numOfResult
-    print frequency_hash
     return frequency_hash.most_common(max_num)
 
   def normal_ngram_search(self, statement, numOfResult):

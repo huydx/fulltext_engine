@@ -3,6 +3,7 @@
 import sys
 import codecs
 from index import Index
+import zenhan
 
 NGRAM = 2
 
@@ -13,6 +14,12 @@ def main(filepath, column):
 
   for line in lines:
     elems = line.split("\t")
+    for elem in elems:
+      zen = zenhan.h2z(elem)
+      han = zenhan.z2h(elem)
+      if zen != elem : elems.
+
+
     indexer.append(''.join(elems[column-1]))
 
   f.close()

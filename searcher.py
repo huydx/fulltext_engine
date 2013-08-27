@@ -11,7 +11,7 @@ class Searcher:
     self.engine = Search(NGRAM, "./")
   
   def execute(self, statement, numOfResult):
-    return self.engine.ngram_search(unicode(statement, "UTF-8"), numOfResult)
+    return self.engine.zenhan_ngram_search(unicode(statement, "UTF-8"), numOfResult)
 
   def execute_with_print(self, statement, numOfResult):
     search_result = self.execute(statement, numOfResult)

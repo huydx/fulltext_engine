@@ -1,9 +1,8 @@
 # -*- coding: UTF-8 -*-
-
 from docid import DocID
 from content import Content
 from tokenizer import Tokenizer
-import collections #use OrderredDict to sort dict by key
+from collections import Counter
 
 class Search:
   def __init__(self, ngram, dir):
@@ -15,7 +14,7 @@ class Search:
     self.content.load(dir + "content.pickle")
 
   def ngram_search(self, statement, numOfResult):
-    frequency_hash = dict() # {document_id : frequencey}
+    frequency_hash = Counter() # {document_id : frequencey}
     
     tokenized_str = self.tokenizer.split(statement, self.ngram)
 
@@ -28,9 +27,5 @@ class Search:
         else:
           frequency_hash[content_id] = 1
     
-    return frequency_hash
-    #loop_num = len(frequency_hash) if numOfResult > len(frequency_hash) else numOfResult
-    #print frequency_hash    
-    #order_dict = collections.OrderedDict(sorted(frequency_hash.items()))
-    #return order_dict #[TODO] convert order dict to normal dict?(need?)
-
+    max_num = len(frequency_hash) if numOfResult > len(frequency_hash) else numOfResult
+    return frequency_hash.most_common(max_num)

@@ -15,8 +15,8 @@ class Searcher:
 
   def execute_with_print(self, statement, numOfResult):
     search_result = self.execute(statement, numOfResult)
-    for key, value in search_result.iteritems():
-      doc = self.engine.content.get(key)
+    for elem in search_result:
+      doc = self.engine.content.get(elem[0])
       print doc
 
 

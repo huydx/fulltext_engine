@@ -14,10 +14,10 @@ class Index:
     return self.tokenizer.split(statement, self.ngram)
     
   def append_doc(self, token, id):
-    self.docID.set(token, id)
+    return self.docID.set(token, id)
 
   def set_content(self, statement):
-    self.content.set(statement)
+    return self.content.set(statement)
 
   def append(self, statement):
     tokenized_str = self.tokenize(statement)

@@ -9,9 +9,13 @@ class Content:
     return len(self.contentTable)
 
   def set(self, content):
-    #[TODO] –ˆ‰ñget_content_num‚ğŒÄ‚Ño‚·‚Ì‚ª”ñŒø—¦H
+    #[TODO] get_content_num called too much 
     self.contentTable[self.get_content_num()] = content
-    return self.get_content_num()
+    current_index = self.get_content_num() - 1
+    return current_index
+  
+  def get(self, id):
+    return self.contentTable.get(id)
 
   def dump(self, file):
     f = open(file, 'w')
@@ -20,5 +24,11 @@ class Content:
 
   def load(self, file):
     f = open(file)
-    pickle.load(self.contentTable, f)
+    self.contentTable = pickle.load(f)
     f.close()
+
+  def pretty_print(self):
+    for key, value in self.contentTable.iteritems():
+      print key
+      print "*****"
+      print value

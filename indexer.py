@@ -13,7 +13,6 @@ def main(filepath, column):
 
   for line in lines:
     elems = line.split("\t")
-    print elems[column-1]
     indexer.append(''.join(elems[column-1]))
 
   f.close()

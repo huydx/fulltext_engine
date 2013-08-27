@@ -24,6 +24,11 @@ class DocID:
     f = open(file)
     self.docIDTable = pickle.load(f)
     f.close()
-
+  
+  def pretty_print(self):
+    for key, value in self.docIDTable.iteritems():
+      print key
+      print "*****"
+      print value
   
 

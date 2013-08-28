@@ -8,7 +8,7 @@ import zenhan
 class SearchNgram:
   def __init__(self, ngram, dir):
     self.docID = DocID()
-    self.tokenizer = Tokenizer("ma")
+    self.tokenizer = Tokenizer("ngram")
     self.content = Content()
     self.ngram = ngram
     self.docID.load(dir + "docid.pickle")

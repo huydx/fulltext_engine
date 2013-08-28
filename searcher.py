@@ -44,19 +44,21 @@ class Searcher:
     if ("OR" in statementList): #--> or routine
       #because can not contain AND and OR in one query
       #so we normalize all strings which have space
+      statementList = statementList.split()
       prev_or = -1
-      list_length = len(statementList) - 1
-
-      for i in range(0, list_length):
-        if (i == list_length):
-          normalized_list.append("".join(statementList[(prev_or+1):i]))
+      statements_len = len(statementList)
+        
+      for i in range(0, statements_len):
         if (statementList[i] == "OR"):
-          if (prev_or + 1) >= (i - 1):
-            return None #[TODO] should raise error
+          if (prev_or + 1) >= i:
+            return None 
           else:
-            normalized_list.append("".join(statementList[(prev_or+1):(i-1)]))
+            normalized_list.append("".join(statementList[(prev_or+1):(i)]))
             prev_or = i
-      print normalized_list
+        
+        if (i == statements_len-1):
+          normalized_list.append("".join(statementList[(prev_or+1):(i+1)]))
+
       return self._or_operator(normalized_list, numOfResult)
     else:                     #--> and routine
       normalized_list = statementList.split()
@@ -71,7 +73,7 @@ class Searcher:
   def _or_operator(self, statementList, numOfResult):
     result = []
     
-    for i in range(0, len(statementList)-1):
+    for i in range(0, len(statementList)):
       temp_ret = self._execute(statementList[i], "all")
       result.append(temp_ret) #[TODO] move below process to here!!!
     
@@ -81,6 +83,8 @@ class Searcher:
     accumulate_result = Counter()
 
     for j in range(0, len(result)):
+      if not result[j]: continue; #in case not search any thing
+      
       if (j == 0): 
         prev_list = result[j]
         continue

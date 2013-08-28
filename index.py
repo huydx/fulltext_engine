@@ -5,7 +5,7 @@ from tokenizer import Tokenizer
 
 class Index:
   def __init__(self, ngram):
-    self.tokenizer = Tokenizer("ma")
+    self.tokenizer = Tokenizer("ngram")
     self.docID = DocID()
     self.content = Content()
     self.ngram = ngram

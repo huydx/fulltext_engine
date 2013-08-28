@@ -5,7 +5,7 @@ from tokenizer import Tokenizer
 from collections import Counter
 import zenhan
 
-class Search:
+class SearchNgram:
   def __init__(self, ngram, dir):
     self.docID = DocID()
     self.tokenizer = Tokenizer()
@@ -14,7 +14,7 @@ class Search:
     self.docID.load(dir + "docid.pickle")
     self.content.load(dir + "content.pickle")
   
-  def zenhan_ngram_search(self, statement, numOfResult):
+  def zenhan_search(self, statement, numOfResult):
     han_statement = zenhan.z2h(statement)
     zen_statement = zenhan.h2z(statement)
 
@@ -22,10 +22,13 @@ class Search:
     zen_list = self.tokenizer.split(zen_statement, self.ngram)
     
     to_search = han_list + zen_list
+    return self._search(to_search, numOfResult)
 
-    return self.ngram_search(to_search, numOfResult)
+  def normal_search(self, statement, numOfResult):
+    tokenized_list = self.tokenizer.split(statement, self.ngram)
+    return self._search(tokenized_list, numOfResult)
 
-  def ngram_search(self, tokenList, numOfResult):
+  def _search(self, tokenList, numOfResult):
     frequency_hash = Counter() # {document_id : frequencey}
     for token in tokenList:
       content_id_list = self.docID.get(token)
@@ -35,11 +38,11 @@ class Search:
           frequency_hash[content_id] += 1
         else:
           frequency_hash[content_id] = 1
-    
-    max_num = len(frequency_hash) if numOfResult > len(frequency_hash) else numOfResult
-    return frequency_hash.most_common(max_num)
+    rethash_len = len(frequency_hash)
 
-  def normal_ngram_search(self, statement, numOfResult):
-    tokenized_list = self.tokenizer.split(statement, self.ngram)
-    return self.ngram_search(tokenized_list, numOfResult)
+    if (numOfResult == "all"):
+      max_num = rethash_len
+    else :
+      max_num = rethash_len if numOfResult > rethash_len  else numOfResult
     
+    return frequency_hash.most_common(max_num)

@@ -44,8 +44,8 @@ class Searcher:
       #because can not contain AND and OR in one query
       #so we normalize all strings which have space
       prev_or = -1
-
-      for i in range(0:len(statementList-1)):
+      list_length = len(statementList) - 1
+      for i in range(0, list_length):
         if i == statementList-1:
           normalized_list.append("".join(statementList[(prev_or+1):i]))
         if (statementList[i] == "OR"):
@@ -69,7 +69,7 @@ class Searcher:
   def _or_operator(self, statementList, numOfResult):
     result = []
     
-    for i in range(0 : len(statementList)-1):
+    for i in range(0, len(statementList)-1):
       temp_ret = self._execute(statementList[i], "all")
       result.append(temp_ret) #[TODO] move below process to here!!!
     
@@ -78,7 +78,7 @@ class Searcher:
     cur_list = []
     accumulate_result = Counter()
 
-    for j in range(0 : len(result)):
+    for j in range(0, len(result)):
       if (j == 0): 
         prev_list = result[j]
         continue
@@ -88,7 +88,7 @@ class Searcher:
       #OR operator bw previous list to current list
       max_score = cur_list[0][1] #max score is first element because our list is sorted
 
-      for m in range(0:len(cur_list)-1):
+      for m in range(0, len(cur_list)-1):
         content_id = cur_list[m][0]
         content_score = cur_list[m][1]
 

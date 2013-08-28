@@ -37,4 +37,3 @@ nosetests.xml
 *.swp
 *.swo
 *.pickle
-*.dat

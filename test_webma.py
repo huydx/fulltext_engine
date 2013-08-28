@@ -8,4 +8,10 @@ p.stdin.write(text + "\n")
 ret = p.wait()
  
 if ret == 0:
-    print p.stdout.read()
+    dat = p.stdout.read()
+    lines = dat.split("\n")
+    for line in lines:
+      if (len(line) > 0):
+        ma_line = line.split()[1]
+        ma_tokens = ma_line.split(",")
+        print ma_tokens[1] 

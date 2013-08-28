@@ -8,7 +8,7 @@ import zenhan
 class SearchNgram:
   def __init__(self, ngram, dir):
     self.docID = DocID()
-    self.tokenizer = Tokenizer()
+    self.tokenizer = Tokenizer("ma")
     self.content = Content()
     self.ngram = ngram
     self.docID.load(dir + "docid.pickle")
@@ -18,14 +18,14 @@ class SearchNgram:
     han_statement = zenhan.z2h(statement)
     zen_statement = zenhan.h2z(statement)
 
-    han_list = self.tokenizer.split(han_statement, self.ngram)
-    zen_list = self.tokenizer.split(zen_statement, self.ngram)
+    han_list = self.tokenizer.split(han_statement)
+    zen_list = self.tokenizer.split(zen_statement)
     
     to_search = han_list + zen_list
     return self._search(to_search, numOfResult)
 
   def normal_search(self, statement, numOfResult):
-    tokenized_list = self.tokenizer.split(statement, self.ngram)
+    tokenized_list = self.tokenizer.split(statement)
     return self._search(tokenized_list, numOfResult)
 
   def _search(self, tokenList, numOfResult):

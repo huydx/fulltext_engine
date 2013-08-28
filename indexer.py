@@ -1,5 +1,4 @@
 # -*- coding: UTF-8 -*-
-
 import sys
 import codecs
 from index import Index
@@ -13,6 +12,7 @@ def main(filepath, column):
   lines = f.readlines()
 
   for line in lines:
+    print line
     elems = line.split("\t")
     indexer.append(''.join(elems[column-1]))
 

@@ -2,6 +2,7 @@
 import sys
 from search import SearchNgram
 from content import Content
+from collections import Counter
 
 NGRAM = 2
 
@@ -13,7 +14,7 @@ class Searcher:
   just a  wrapper for search engine search function
   """
   def _execute(self, statement, numOfResult):
-    return self.engine.normal_ngram_search(unicode(statement, "UTF-8"), numOfResult)
+    return self.engine.zenhan_search(unicode(statement, "UTF-8"), numOfResult)
   
   
   """search with single word
@@ -21,7 +22,7 @@ class Searcher:
   """
   def execute_with_singleword(self, statement, numOfResult):
     search_result = self._execute(statement, numOfResult)
-    print_result(search_result)
+    self.print_result(search_result)
   
 
   """common print result function
@@ -29,7 +30,7 @@ class Searcher:
   search content for each id
   print content
   """
-  def print_result(search_result):
+  def print_result(self, search_result):
     for elem in search_result:
       doc = self.engine.content.get(elem[0])
       print doc
@@ -45,8 +46,9 @@ class Searcher:
       #so we normalize all strings which have space
       prev_or = -1
       list_length = len(statementList) - 1
+
       for i in range(0, list_length):
-        if i == statementList-1:
+        if (i == list_length):
           normalized_list.append("".join(statementList[(prev_or+1):i]))
         if (statementList[i] == "OR"):
           if (prev_or + 1) >= (i - 1):
@@ -54,7 +56,7 @@ class Searcher:
           else:
             normalized_list.append("".join(statementList[(prev_or+1):(i-1)]))
             prev_or = i
-
+      print normalized_list
       return self._or_operator(normalized_list, numOfResult)
     else:                     #--> and routine
       normalized_list = statementList.split()
@@ -99,7 +101,7 @@ class Searcher:
           accumulate_result[content_id] = content_score
       prev_list = cur_list
     
-    print_result(accumulate_result.most_common(numOfResult))
+    self.print_result(accumulate_result.most_common(numOfResult))
 
   """private function: and_operator
   take input as statement list (for example "a b" will as ["a", "b"]
@@ -116,25 +118,26 @@ class Searcher:
         score = content[1]
         accumulate_result[id] += score 
 
-    print_result(accumulate_result.most_common(numOfResult))
+    self.print_result(accumulate_result.most_common(numOfResult))
 
 """
 main function to process as a script
 """
 if __name__ == "__main__":
-  param_len =  sys.argv
+  param_len =  len(sys.argv)
   if (param_len) < 3:
     print "usage: ./searcher.py statement numOfResult"
     sys.exit(1)
   
   statement = None
   statement_list = None
-
+  
   if (param_len == 3):
     statement = sys.argv[1]
     numOfResult = int(sys.argv[2])
   else:
-    statement_list = " ".join(sys.argv[1:param_len-1])
+    statement_list = " ".join(sys.argv[1:(param_len-1)])
+    numOfResult = int(sys.argv[param_len-1])
 
   searcher = Searcher()
   

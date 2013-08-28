@@ -5,14 +5,15 @@ from tokenizer import Tokenizer
 
 class Index:
   def __init__(self, ngram):
-    self.tokenizer = Tokenizer()
+    self.tokenizer = Tokenizer("ma")
     self.docID = DocID()
     self.content = Content()
     self.ngram = ngram
 
   def tokenize(self, statement):
-    return self.tokenizer.split(statement, self.ngram)
-    
+    #return self.tokenizer.split(statement, self.ngram)
+    return self.tokenizer.split(statement)
+
   def append_doc(self, token, id):
     return self.docID.set(token, id)
 

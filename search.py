@@ -31,18 +31,21 @@ class SearchNgram:
   def _search(self, tokenList, numOfResult):
     frequency_hash = Counter() # {document_id : frequencey}
     for token in tokenList:
-      content_id_list = self.docID.get(token)
+      content_list = self.docID.get(token)
 
-      for content_id in content_id_list:
+      for content_data in content_list:
+        content_id = content_data[0]
+        token_index = content_data[1]
+
         if frequency_hash.has_key(content_id):
           frequency_hash[content_id] += 1
         else:
           frequency_hash[content_id] = 1
-    rethash_len = len(frequency_hash)
+    frequency_hash_len = len(frequency_hash)
 
     if (numOfResult == "all"):
-      max_num = rethash_len
+      max_num = frequency_hash_len
     else :
-      max_num = rethash_len if numOfResult > rethash_len  else numOfResult
+      max_num = frequency_hash_len if numOfResult > frequency_hash_len  else numOfResult
     
     return frequency_hash.most_common(max_num)

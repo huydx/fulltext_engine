@@ -7,9 +7,9 @@ class DocID:
   def get_doc_num(self):
     return len(self.docIDTable)
 
-  def set(self, term, docID):
+  def set(self, term, docID, termPos):
     value = self.docIDTable.get(term, [])
-    value.append(docID)
+    value.append((docID, termPos))
     self.docIDTable[term] = value
 
   def get(self, term):

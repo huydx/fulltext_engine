@@ -14,8 +14,8 @@ class Index:
     #return self.tokenizer.split(statement, self.ngram)
     return self.tokenizer.split(statement)
 
-  def append_doc(self, token, id):
-    return self.docID.set(token, id)
+  def append_doc(self, token, id, pos):
+    return self.docID.set(token, id, pos)
 
   def set_content(self, statement):
     return self.content.set(statement)
@@ -23,8 +23,10 @@ class Index:
   def append(self, statement):
     tokenized_str = self.tokenize(statement)
     content_id = self.set_content(statement)
+    token_index = 0
     for token in tokenized_str:
-      self.append_doc(token, content_id) 
+      self.append_doc(token, content_id, token_index)
+      token_index += 1 
 
   def dump(self, dir):
     f_content_name = "content.pickle"

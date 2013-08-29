@@ -28,24 +28,13 @@ def printout(text, colour=WHITE):
   else:
     sys.stdout.write(text)
 
-def breakRNA(sequence, *breakPoint):
-  sequenceList = []
-  noOfBreakPoints = len(breakPoint)
-  for breakPt in range(noOfBreakPoints):
-    for index in breakPoint:
-      sequenceList.append(sequence[:index])
-      sequence = sequence[index:]
-    break
-  return sequenceList
-
 def test():
-  statement = unicode("私はははフイです,私は", "UTF-8")
-  query = [unicode("私", "UTF-8"), unicode("フイ", "UTF-8")]
+  statement = unicode("私はははフイフイです,私は", "UTF-8")
+  query = [unicode("私", "UTF-8"), unicode("フイ", "UTF-8"), unicode("へ", "UTF-8")]
   
   #reorder query
   list_q = []
   for q in query:
-    if q not in statement: continue;
     indices = [m.start() for m in re.finditer(q, statement)]
     for i in indices: list_q.append((q, i)) 
   

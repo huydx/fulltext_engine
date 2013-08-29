@@ -6,7 +6,7 @@ from tokenizer import Tokenizer
 
 class Index:
   def __init__(self, ngram):
-    self.tokenizer = Tokenizer("ma")
+    self.tokenizer = Tokenizer("ngram")
     self.docID = DocID()
     self.content = Content()
     self.ngram = ngram
@@ -38,10 +38,15 @@ class Index:
       token_index += 1 
 
   def dump(self, dir):
-    content_basename = "content"
-    docid_basename = "docid"
+    f_content_name = "content.pickle"
+    f_docid_name = "docid.pickle"
     
-    f_docid_id = self.get_current_doc_id()
-
     self.content.dump(f_content_name)
+    self.docID.dump(f_docid_name)
+
+  def load(self, dir):
+    f_content_name = "content.pickle"
+    f_docid_name = "docid.pickle"
+
+    self.content.load(f_content_name)
     self.docID.dump(f_docid_name)

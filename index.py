@@ -17,6 +17,12 @@ class Index:
 
   def append_doc(self, token, id, pos):
     return self.docID.set(token, id, pos)
+  
+  def get_current_doc_id(self):
+    return self.docID.get_doc_num()
+
+  def get_current_content_id(self):
+    return self.content.get_doc_num()
 
   def set_content(self, statement):
     return self.content.set(statement)
@@ -32,7 +38,10 @@ class Index:
       token_index += 1 
 
   def dump(self, dir):
-    f_content_name = "content.pickle"
-    f_docid_name = "docid.pickle"
+    content_basename = "content"
+    docid_basename = "docid"
+    
+    f_docid_id = self.get_current_doc_id()
+
     self.content.dump(f_content_name)
     self.docID.dump(f_docid_name)

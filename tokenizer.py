@@ -29,11 +29,13 @@ class Tokenizer:
       for line in tokenized_result:
         line_elems = line.split()
         if (len(line_elems) > 1):
-          ma_line = line.split()[1]
+          ma_line = line.split()[1] #each line get from webma
           ma_tokens = ma_line.split(",")
           if (len(ma_tokens) < 2): continue;
-          orig = ma_tokens[0]
-          hira = ma_tokens[1]
+
+          orig = ma_tokens[0] #original token
+          hira = ma_tokens[1] #hiragana token
+
           result.append(orig)
           if (hira != orig):
             result.append(hira)

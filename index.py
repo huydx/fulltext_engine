@@ -3,9 +3,10 @@ from docid import DocID
 from content import Content
 from tokenizer import Tokenizer
 
+
 class Index:
   def __init__(self, ngram):
-    self.tokenizer = Tokenizer("ngram")
+    self.tokenizer = Tokenizer("ma")
     self.docID = DocID()
     self.content = Content()
     self.ngram = ngram
@@ -23,7 +24,9 @@ class Index:
   def append(self, statement):
     tokenized_str = self.tokenize(statement)
     content_id = self.set_content(statement)
+
     token_index = 0
+
     for token in tokenized_str:
       self.append_doc(token, content_id, token_index)
       token_index += 1 

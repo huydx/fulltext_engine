@@ -3,27 +3,30 @@ import sys
 from search import SearchNgram
 from content import Content
 from collections import Counter
+import termcolor 
 
 NGRAM = 2
+DAMPING_SCORE = 10
+BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8) #term color
 
 class Searcher:
   def __init__(self):
     self.engine = SearchNgram(NGRAM, "./")
-  
+   
   """private execute function 
   just a  wrapper for search engine search function
   """
   def _execute(self, statement, numOfResult):
     return self.engine.zenhan_search(unicode(statement, "UTF-8"), numOfResult)
   
-  
+ 
   """search with single word
   single word is statement without operator (without space as AND or OR keyword)
   """
   def execute_with_singleword(self, statement, numOfResult):
     search_result = self._execute(statement, numOfResult)
     self.print_result(search_result)
-  
+
 
   """common print result function
   input as a list of tubles: [(id1, score1), (id2, score2)... ]
@@ -31,10 +34,12 @@ class Searcher:
   print content
   """
   def print_result(self, search_result):
+    #[TODO] print matched words with color
     for elem in search_result:
       doc = self.engine.content.get(elem[0])
-      print doc
+      termcolor.printout(doc, RED)
   
+
   """search with list word
   list word is statement with operator (with space as AND and OR operator)
   """
@@ -63,7 +68,9 @@ class Searcher:
     else:                     #--> and routine
       normalized_list = statementList.split()
       return self._and_operator(normalized_list, numOfResult)
-  
+
+
+
   """private function: or_operator
   take input as statement list (for example "a OR B" will as ["a", "OR", "b"]
   preprocess to concat string with space (for ex: "a b OR c" will as ["ab", "c"]
@@ -107,12 +114,15 @@ class Searcher:
     
     self.print_result(accumulate_result.most_common(numOfResult))
 
+
+
   """private function: and_operator
   take input as statement list (for example "a b" will as ["a", "b"]
   take result of each statement and return list of result
-  execute AND operator for all results
+  execute AND operator for all results (simply merge all result + increase score)
   """
   def _and_operator(self, statementList, numOfResult):
+    #[TODO] set ealier token higher score
     accumulate_result = Counter()
     
     for statement in statementList:
@@ -124,10 +134,13 @@ class Searcher:
 
     self.print_result(accumulate_result.most_common(numOfResult))
 
+
+
 """
 main function to process as a script
 """
 if __name__ == "__main__":
+  #[TODO] load once, search multiple!
   param_len =  len(sys.argv)
   if (param_len) < 3:
     print "usage: ./searcher.py statement numOfResult"

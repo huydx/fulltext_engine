@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 import sys
-from search import SearchNgram
+from search import Search
 from content import Content
 from collections import Counter
 import termcolor 
@@ -11,7 +11,7 @@ BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8) #term color
 
 class Searcher:
   def __init__(self):
-    self.engine = SearchNgram(NGRAM, "./")
+    self.engine = Search(NGRAM, "./")
    
   """private execute function 
   just a  wrapper for search engine search function
@@ -37,7 +37,8 @@ class Searcher:
     #[TODO] print matched words with color
     for elem in search_result:
       doc = self.engine.content.get(elem[0])
-      termcolor.printout(doc, RED)
+      termcolor.printout(doc, YELLOW)
+      print ""
   
 
   """search with list word
@@ -68,7 +69,6 @@ class Searcher:
     else:                     #--> and routine
       normalized_list = statementList.split()
       return self._and_operator(normalized_list, numOfResult)
-
 
 
   """private function: or_operator
@@ -133,7 +133,6 @@ class Searcher:
         accumulate_result[id] += score 
 
     self.print_result(accumulate_result.most_common(numOfResult))
-
 
 
 """

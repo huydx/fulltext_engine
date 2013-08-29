@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/env python
 import sys
 
@@ -25,3 +26,35 @@ def printout(text, colour=WHITE):
     sys.stdout.write(seq)
   else:
     sys.stdout.write(text)
+
+def breakRNA(sequence, *breakPoint):
+  sequenceList = []
+  noOfBreakPoints = len(breakPoint)
+  for breakPt in range(noOfBreakPoints):
+    for index in breakPoint:
+      sequenceList.append(sequence[:index])
+      sequence = sequence[index:]
+    break
+  return sequenceList
+
+def test():
+  statement = unicode("私はははフイです", "UTF-8")
+  query = [unicode("私ははは", "UTF-8"), unicode("フイ", "UTF-8")]
+  
+  start_idx = 0
+  q_list_len = len(query)
+  loop_idx = 0
+
+  for q in query:
+    i = statement.index(q)  
+    q_len = len(q)
+    s = statement[start_idx:i]
+    if s: print s
+    printout(q, YELLOW)
+    start_idx = i + q_len
+    loop_idx += 1
+
+  s = statement[start_idx:len(statement)] 
+  if s: print s
+  
+test()

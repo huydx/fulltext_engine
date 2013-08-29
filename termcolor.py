@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python
 import sys
+import re
 
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
@@ -38,23 +39,32 @@ def breakRNA(sequence, *breakPoint):
   return sequenceList
 
 def test():
-  statement = unicode("私はははフイです", "UTF-8")
-  query = [unicode("私ははは", "UTF-8"), unicode("フイ", "UTF-8")]
+  statement = unicode("私はははフイです,私は", "UTF-8")
+  query = [unicode("私", "UTF-8"), unicode("フイ", "UTF-8")]
   
+  #reorder query
+  list_q = []
+  for q in query:
+    if q not in statement: continue;
+    indices = [m.start() for m in re.finditer(q, statement)]
+    for i in indices: list_q.append((q, i)) 
+  
+  list_q = sorted(list_q, key=lambda x: x[1])    
+ 
   start_idx = 0
   q_list_len = len(query)
   loop_idx = 0
 
-  for q in query:
-    i = statement.index(q)  
-    q_len = len(q)
+  for q in list_q:
+    i = q[1]  
+    q_len = len(q[0])
     s = statement[start_idx:i]
-    if s: print s
-    printout(q, YELLOW)
+    if s: sys.stdout.write(s);
+    printout(q[0], YELLOW)
     start_idx = i + q_len
     loop_idx += 1
 
   s = statement[start_idx:len(statement)] 
   if s: print s
-  
+ 
 test()

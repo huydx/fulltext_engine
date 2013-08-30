@@ -3,6 +3,7 @@ import sys
 from search import Search
 from content import Content
 from collections import Counter
+from tokenizer import Tokenizer
 import termcolor 
 
 NGRAM = 2
@@ -12,38 +13,31 @@ BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8) #term color
 class Searcher:
   def __init__(self):
     self.engine = Search(NGRAM, "./")
-   
-  """private execute function 
-  just a  wrapper for search engine search function
-  """
+    self.tokenizer = Tokenizer("ma")
+    self.query_string = []
+
+  #just a  wrapper for search engine search function
   def _execute(self, statement, numOfResult):
     return self.engine.zenhan_search(unicode(statement, "UTF-8"), numOfResult)
   
- 
-  """search with single word
-  single word is statement without operator (without space as AND or OR keyword)
-  """
+  #single word is statement without operator (without space as AND or OR keyword)
   def execute_with_singleword(self, statement, numOfResult):
     search_result = self._execute(statement, numOfResult)
-    self.print_result(search_result)
+    statement = self.tokenizer.split(unicode(statement, "UTF-8"))
+    self.print_result(search_result, statement)
 
 
-  """common print result function
-  input as a list of tubles: [(id1, score1), (id2, score2)... ]
-  search content for each id
-  print content
-  """
-  def print_result(self, search_result):
+  #input as a list of tubles: [(id1, score1), (id2, score2)... ]
+  #search content for each id
+  #print content
+  def print_result(self, search_result, query):
     #[TODO] print matched words with color
     for elem in search_result:
       doc = self.engine.content.get(elem[0])
-      termcolor.printout(doc, YELLOW)
+      termcolor.printcolor(doc, query)
       print ""
   
-
-  """search with list word
-  list word is statement with operator (with space as AND and OR operator)
-  """
+  #list word is statement with operator (with space as AND and OR operator)
   def execute_with_listword(self, statementList, numOfResult):
     normalized_list = []
 
@@ -71,15 +65,19 @@ class Searcher:
       return self._and_operator(normalized_list, numOfResult)
 
 
-  """private function: or_operator
-  take input as statement list (for example "a OR B" will as ["a", "OR", "b"]
-  preprocess to concat string with space (for ex: "a b OR c" will as ["ab", "c"]
-  take result of each statement and return list of result
-  execute OR operator for all results
-  """
+  #take input as statement list (for example "a OR B" will as ["a", "OR", "b"]
+  #preprocess to concat string with space (for ex: "a b OR c" will as ["ab", "c"]
+  #take result of each statement and return list of result
+  #execute OR operator for all results
   def _or_operator(self, statementList, numOfResult):
     result = []
     
+    for statement in statementList:
+      #append to query to print color
+      tokens = self.tokenizer.split(unicode(statement, "UTF-8"))
+      for t in tokens: 
+        if t not in self.query_string: self.query_string.append(t)
+
     for i in range(0, len(statementList)):
       temp_ret = self._execute(statementList[i], "all")
       result.append(temp_ret) #[TODO] move below process to here!!!
@@ -112,32 +110,32 @@ class Searcher:
           accumulate_result[content_id] = content_score
       prev_list = cur_list
     
-    self.print_result(accumulate_result.most_common(numOfResult))
+    self.print_result(accumulate_result.most_common(numOfResult), self.query_string)
 
 
 
-  """private function: and_operator
-  take input as statement list (for example "a b" will as ["a", "b"]
-  take result of each statement and return list of result
-  execute AND operator for all results (simply merge all result + increase score)
-  """
+  #take input as statement list (for example "a b" will as ["a", "b"]
+  #take result of each statement and return list of result
+  #execute AND operator for all results (simply merge all result + increase score)
   def _and_operator(self, statementList, numOfResult):
     #[TODO] set ealier token higher score
     accumulate_result = Counter()
     
     for statement in statementList:
+      #append to query to print color
+      tokens = self.tokenizer.split(unicode(statement, "UTF-8"))
+      for t in tokens: 
+        if t not in self.query_string: self.query_string.append(t)
+
       result = self._execute(statement, "all")
       for content in result:
         id = content[0]
         score = content[1]
         accumulate_result[id] += score 
 
-    self.print_result(accumulate_result.most_common(numOfResult))
+    self.print_result(accumulate_result.most_common(numOfResult), self.query_string)
 
 
-"""
-main function to process as a script
-"""
 if __name__ == "__main__":
   #[TODO] load once, search multiple!
   param_len =  len(sys.argv)
